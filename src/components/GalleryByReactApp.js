@@ -39,14 +39,18 @@ var ImgFigure = React.createClass({
 		// 	this.props.dolayout(this.props.index); //父组件里面的事件
 		// } className={this.state.classnamestr}
 		this.props.dolayout(this.props.index, !this.props.isback);
-		console.log("当前点击ID："+this.props.index);
+		//console.log("当前点击ID："+this.props.index);
 	},
 
 	render() {
 
-		var classnamestr =this.props.isback ? 'isback' : '';
+		var classnamestr ="";
+		if(this.props.index == this.props.centerindex ){
+			classnamestr = this.props.isback ? 'isback' : '';
+		}
+			
 		return (
-			<figure  onClick={this.handleClick} ref="imgC">
+			<figure className={classnamestr}  onClick={this.handleClick} ref="imgC">
 				<img src={this.props.src} />
 				<figcaption>
 					<h2>{this.props.tit}</h2>
@@ -67,10 +71,11 @@ var GalleryByReactApp = React.createClass({
 	reLayoutImage: function(centerindex ,isback){
 		if(this.state.img_center_index != centerindex){
 			this.setState({
-				img_center_index: centerindex
+				img_center_index: centerindex,
+				isback:false
 			});
 			console.log("点击居中ID："+ centerindex);
-			this.layoutImage();
+			//this.layoutImage();
 
 		}
 		else{
@@ -116,13 +121,16 @@ var GalleryByReactApp = React.createClass({
 	componentDidMount() {
 		this.layoutImage();
 	},	
+	componentDidUpdate(prevProps, prevState) {
+		this.layoutImage();
+	},
 	render() {
 		var controllerUnits =[];
 		var ImgFigures = [];
 		//console.log(imageDatas);
 		imageDatas.map(function(val,key){
 			//console.log(key);
-			ImgFigures.push(<ImgFigure key={key} index={key} src={val.filename} ref={'img'+key} tit={val.title} desc={val.desc} isback={this.state.isback} dolayout={this.reLayoutImage} />);
+			ImgFigures.push(<ImgFigure key={key} index={key} centerindex={this.state.img_center_index} src={val.filename} ref={'img'+key} tit={val.title} desc={val.desc} isback={this.state.isback} dolayout={this.reLayoutImage} />);
 		
 			controllerUnits.push(<ControllerUnits key={key} index={key} ref={'nav'+key}  centerindex={this.state.img_center_index} dolayout={this.layoutImage}  />);
 		}.bind(this));
