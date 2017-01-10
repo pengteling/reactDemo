@@ -17,66 +17,36 @@ var imageDatas = imageDatas_all.map(function(val){
 	};
 });
 var ImgFigure = React.createClass({
-
-	getInitialState() {
-		return{
-			classnamestr:''
-		}
-	},
 	
 	handleClick:function(){
-		//console.log("test");
+		
 		// if(this.props.centerindex == this.props.index){
-		// 	console.log(this.refs.imgC);
-		// 	console.log(this.state.isback);
-		// 	if(this.state.isback==false){ //翻转
-		// 		$(this.refs.imgC).addClass("isback");
+		// 	if(this.state.classnamestr!="isback"){
 		// 		this.setState({
-		// 			isback : true
-		// 		});
-		// 		console.log(this.state.isback);
-		// 	}
+		// 			classnamestr : "isback"
+		// 		});				
+		// 	}	
 		// 	else{
-		// 		$(this.refs.imgC).removeClass("isback");
 		// 		this.setState({
-		// 			isback: false
+		// 			classnamestr : ""
 		// 		});
-		// 		console.log(this.state.isback);
 		// 	}
-		// }else{
-
-		// 	$(this.refs.imgC).siblings().removeClass("isback"); //已经翻转的 要翻转回去
-		// 		this.setState({
-		// 			isback: false
-		// 		});			
-
-		// 	//要重新排布  layoutImage(centerindex)
-
-		// 	this.props.dolayout(this.props.index); //父组件里面的事件
-
+		// 	//this.props.dolayout(this.props.index); //父组件里面的事件
 		// }
-		if(this.props.centerindex == this.props.index){
-			if(this.state.classnamestr!="isback"){
-				this.setState({
-					classnamestr : "isback"
-				});				
-			}	
-			else{
-				this.setState({
-					classnamestr : ""
-				});
-			}
-			//this.props.dolayout(this.props.index); //父组件里面的事件
-		}
-		else{
-			//清除一下已经翻转的状态
-			$(this.refs.imgC).siblings().removeClass("isback"); //已经翻转的 要翻转回去
-			this.props.dolayout(this.props.index); //父组件里面的事件
-		}
+		// else{
+		// 	//清除一下已经翻转的状态
+		// 	$(this.refs.imgC).siblings().removeClass("isback"); //已经翻转的 要翻转回去
+		// 	this.props.dolayout(this.props.index); //父组件里面的事件
+		// } className={this.state.classnamestr}
+		this.props.dolayout(this.props.index, !this.props.isback);
+		console.log("当前点击ID："+this.props.index);
 	},
+
 	render() {
+
+		var classnamestr =this.props.isback ? 'isback' : '';
 		return (
-			<figure className={this.state.classnamestr} onClick={this.handleClick} ref="imgC">
+			<figure  onClick={this.handleClick} ref="imgC">
 				<img src={this.props.src} />
 				<figcaption>
 					<h2>{this.props.tit}</h2>
@@ -93,30 +63,24 @@ var GalleryByReactApp = React.createClass({
 			img_center_index: Math.floor(Math.random()*16), //居中图片Index 0~15
 			isback: false //正面还是背面？
 		}
-	}
-	,
-	dolayout:function(index){
-		this.setState({
-			img_center_index : index
-		});
-		console.log(index);
-		console.log(this.state.img_center_index);
+	},	
+	reLayoutImage: function(centerindex ,isback){
+		if(this.state.img_center_index != centerindex){
+			this.setState({
+				img_center_index: centerindex
+			});
+			console.log("点击居中ID："+ centerindex);
+			this.layoutImage();
 
-		if(index==this.state.img_center_index){
+		}
+		else{
 			this.setState({
-				isback: !this.state.isback				
-			})
-		}else{
-			this.setState({
-				isback: false
-			})
-		};
+				isback : !this.state.isback
+			});
+		}
 		
 	},
-	componentDidUpdate(prevProps, prevState) {
-		this.layoutImage(this.state.img_center_index);	
-	},
-	layoutImage:function(){				
+	layoutImage:function(){		
 		
 		var stageDOM = this.refs.stage;
 		var stageW = $(stageDOM).width();
@@ -126,7 +90,7 @@ var GalleryByReactApp = React.createClass({
 
 		//console.log(halfStageH);
 		//console.log(halfStageW);
-		console.log(this.state.img_center_index); //当前居中ID
+		console.log("当前居中ID："+this.state.img_center_index); //当前居中ID
 
 		var centerimg =ReactDOM.findDOMNode(this.refs['img'+this.state.img_center_index]);
 			//console.log(centerimg);
@@ -151,45 +115,16 @@ var GalleryByReactApp = React.createClass({
 	//组件加载以后 为每张图片计算位置范围
 	componentDidMount() {
 		this.layoutImage();
-			// var stageDOM = this.refs.stage;
-			// var stageW = $(stageDOM).width();
-			// var stageH = $(stageDOM).height();
-			// var halfStageW = Math.ceil(stageW/2);
-			// var halfStageH = Math.ceil(stageH/2);
-
-			// console.log(halfStageH);
-			// console.log(halfStageW);
-			// console.log(this.state.img_center_index); //当前居中ID
-
-			// var centerimg =ReactDOM.findDOMNode(this.refs['img'+this.state.img_center_index]);
-			// //console.log(centerimg);
-			// $(centerimg).css("left",(halfStageW - 120)+'px').css("top", halfStageH - 135 +'px').css("z-index",3);
-			// var rndx =0,rndy=0;
-			// imageDatas.map(function(val,key){
-			// 	console.log(this.state.img_center_index);
-			// 	if (key!= this.state.img_center_index){
-			// 		rndx = Math.random() * stageW;
-			// 		rndy =Math.random()* stageH;
-			// 		$(ReactDOM.findDOMNode(this.refs['img'+key])).css("left",rndx+"px").css("top",rndy+"px");
-			// 	}
-			// }.bind(this));
-
-	},
-	// inverse:function(index){
-	// 	var new_isback = this.state.isback == true? false : true ;
-	// 	this.setState({
-	// 		isback: new_isback
-	// 	})
-	// },
+	},	
 	render() {
 		var controllerUnits =[];
 		var ImgFigures = [];
 		//console.log(imageDatas);
 		imageDatas.map(function(val,key){
 			//console.log(key);
-			ImgFigures.push(<ImgFigure key={key} index={key} src={val.filename} ref={'img'+key} tit={val.title} desc={val.desc} centerindex={this.state.img_center_index} dolayout={this.dolayout} isback={this.state.isback}/>);
+			ImgFigures.push(<ImgFigure key={key} index={key} src={val.filename} ref={'img'+key} tit={val.title} desc={val.desc} isback={this.state.isback} dolayout={this.reLayoutImage} />);
 		
-			controllerUnits.push(<ControllerUnits key={key} index={key} ref={'nav'+key}  centerindex={this.state.img_center_index} dolayout={this.dolayout}  isback={this.state.isback} />);
+			controllerUnits.push(<ControllerUnits key={key} index={key} ref={'nav'+key}  centerindex={this.state.img_center_index} dolayout={this.layoutImage}  />);
 		}.bind(this));
 		return(
 			<section className="stage" ref="stage">
