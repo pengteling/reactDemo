@@ -17,7 +17,7 @@ var ImgFigure = React.createClass({
 		return (
 			<figure>
 				<img src={this.props.data} />
-								<figcaption>
+				<figcaption>
 					<h2></h2>
 				</figcaption>
 			</figure>
@@ -67,7 +67,7 @@ var GalleryByReactApp = React.createClass({
 					{ImgFigures}
 				</section>
 				<nav className="controller-nav">
-				</nav>
+				</nav>				
 			</section>
 
 			)
