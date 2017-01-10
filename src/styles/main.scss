@@ -24,12 +24,16 @@ html,body{
 	height:100%;
 	overflow:hidden;
 	background-color:#ddd;
+	perspective:1000px; 
+	transform-style: preserve-3d  ;
+	backface-visibility:hidden;
 	figure{
 		position: absolute;
 		width: 240px;
 		height: 270px;
 		background-color:#fff;
 		cursor: pointer;
+		transition:  all 1s ;
 		img{
 			height: 240px;
 			display: block
@@ -42,6 +46,23 @@ html,body{
 			font-size:14px;
 			line-height: 30px;
 		}
+		.desc{
+			width:240px;
+			height: 270px;
+			background-color:#fff;
+			left: 0;
+			top: 0;			
+			position: absolute;
+			opacity: 0;
+			transform: rotateY(180deg) ;
+		}
+		&.isback{
+			transform:rotateY(180deg);
+			.desc{
+				opacity: 1;
+			}
+		}
+
 	}
 }
 .controller-nav{
@@ -51,6 +72,38 @@ html,body{
 	z-index:101;
 	width:100%;
 	text-align:center;
+
+	span{
+		display: inline-block;
+		width:20px;
+		height: 20px;
+		transform:  scale(0.5);
+		background-color:#333;
+		border-radius:50%;
+		margin:0 5px;
+		cursor: pointer;
+		vertical-align: middle;
+		transition: all 0.3s;
+		&.active{
+			transform:  scale(1);
+			position: relative;
+			&::before{
+				position: absolute;
+				content: "C";
+				left: 0;
+				top: 0;
+				width:20px;
+				height: 20px;
+				text-align: center;
+				line-height: 20px;
+				color: #fff;
+			}
+			&.inverse{
+				transform: rotateY(180deg);
+			}
+		}
+
+	}
 	
 
 }
