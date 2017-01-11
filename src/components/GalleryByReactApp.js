@@ -20,23 +20,33 @@ let imageDatas = imageDatas_all.map(function(val){
 
 class ImgFigure extends React.Component{
 	constructor(props) {
-		super(props);		
-	}
+		super(props);	
+		this.handleClick = this.handleClick.bind(this); //绑定this	
+	}	
+	handleClick(ev){
+		ev.stopPropagation();
+		ev.preventDefault();
+		if(this.props.data.iscenter){
+			this.props.doinverse();
 
+		}else{
+			//console.log(this.props);
+			this.props.docenter();
+		}
+	}
 	render() {
 		//console.log("render 子组件");
-		var classnamestr ="";
-		if(this.props.index == this.props.centerindex ){
-			classnamestr = this.props.isback ? 'isback' : '';
-		}
-			
+
+		let styleObj = {};
+		styleObj = this.props.data.pos;		
+		let classnamestr = this.props.data.isinverse? "isback":""	
 		return (
-			<figure className={classnamestr}  onClick={this.handleClick} ref="imgC">
-				<img src={this.props.src} />
+			<figure className={classnamestr}  style={styleObj} onClick={this.handleClick} ref="imgC">
+				<img src={this.props.data.filename} />
 				<figcaption>
-					<h2>{this.props.tit}</h2>
+					<h2>{this.props.data.title}</h2>
 				</figcaption>
-				<p className="desc">{this.props.desc}</p>
+				<p  onClick={this.handleClick} className="desc">{this.props.data.desc}</p>
 			</figure>
 			)
 	}
@@ -44,7 +54,7 @@ class ImgFigure extends React.Component{
 
 class GalleryByReactApp extends React.Component{
 	constructor(props) {
-		super(props);
+		super(props);		
 		this.state={
 
 			/* 状态 定义每个图片的状态信息 位置 旋转 是否翻转 是否居中 */
@@ -57,11 +67,80 @@ class GalleryByReactApp extends React.Component{
 						transform: rotate(0deg)
 					},
 					isinverse: false,
-					iscenter: false
+					iscenter: false,
+					filename:"",
+					title:"",
+					desc:""
 				}*/
 			]
 
 		}
+	}
+	getImgPos(iscenter){ //获取单个图片pos 随机和中心图片
+		var stageW = $(window).width();
+		var stageH = $(window).height();
+		var halfStageW = Math.ceil(stageW/2);
+		var halfStageH = Math.ceil(stageH/2);
+		var rndx =0,rndy=0,rndrotate=0,zIndex=1;		
+			
+		if(iscenter){ 
+			//如果中心图片
+			//全部为0
+			//console.log("当前中心图片id"+this.props.index);
+			rndx = halfStageW -120;
+			rndy = halfStageH -120;
+			rndrotate = 0;
+			zIndex=3;
+		}
+		else{
+				//rndx = Math.random() * stageW;
+			rndx = (Math.random() -0.5>0) ? (Math.random()*(halfStageW  - 360)-20) : (-Math.random()*(halfStageW-360)  +stageW -120);
+			rndy =Math.random()* stageH;
+			rndrotate = (0.5 - Math.random())* 60;			
+		}
+
+		return {			
+				left: rndx +"px",
+				top: rndy +"px",
+				zIndex:zIndex,
+				//rotate : rndrotate +"deg"			
+				//transform: "rotate("+rndrotate +"deg)"
+		}
+	}
+	layoutImage(centerindex){
+		let imgdataArr =this.state.imgdataArr;
+		imageDatas.map(function(val,key){
+			imgdataArr[key]={
+				pos : this.getImgPos(key == centerindex),
+				filename :val.filename,
+				desc : val.desc,
+				title : val.title,
+				isinverse: false,
+				iscenter: key == centerindex
+			};	
+			
+		}.bind(this));
+		this.setState({
+			imgdataArr: imgdataArr
+		})
+	}
+	componentWillMount() {	
+		this.layoutImage(0)
+	}
+	tocenter(index){
+		return function(){
+			//console.log(index);
+			this.layoutImage(index);
+		}.bind(this);
+	}
+	toinverse(index){
+		return function(){
+			let imgdataArr =this.state.imgdataArr;
+			imgdataArr[index].isinverse = !imgdataArr[index].isinverse;
+			this.setState({
+				imgdataArr:imgdataArr
+			})
+		}.bind(this)
 	}
 	render(){		
 		console.log("render 父组件");
@@ -69,7 +148,7 @@ class GalleryByReactApp extends React.Component{
 		var ImgFigures = [];
 		//console.log(imageDatas);
 		imageDatas.map(function(val,key){			
-			ImgFigures.push(<ImgFigure key={key} index={key} centerindex={this.state.img_center_index} src={val.filename} ref={'img'+key} tit={val.title} desc={val.desc} dolayout={this.reLayoutImage} isback={this.state.isback} doback={this.goback}/>);
+			ImgFigures.push(<ImgFigure key={key} ref={'img'+key} docenter={this.tocenter(key)} doinverse={this.toinverse(key)} data={this.state.imgdataArr[key]} />);
 		
 			//controllerUnits.push(<ControllerUnits key={key} index={key} ref={'nav'+key}  centerindex={this.state.img_center_index} dolayout={this.layoutImage}  />);
 
