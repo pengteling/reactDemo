@@ -95,7 +95,7 @@ var GalleryByReactApp = React.createClass({
 
 		//console.log(halfStageH);
 		//console.log(halfStageW);
-		console.log("当前居中ID："+this.state.img_center_index); //当前居中ID
+		//console.log("当前居中ID："+this.state.img_center_index); //当前居中ID
 
 		var centerimg =ReactDOM.findDOMNode(this.refs['img'+this.state.img_center_index]);
 			//console.log(centerimg);
@@ -122,9 +122,11 @@ var GalleryByReactApp = React.createClass({
 		this.layoutImage();
 	},	
 	componentDidUpdate(prevProps, prevState) {
-		this.layoutImage();
+		//this.layoutImage();
 	},
 	render() {
+		console.log("render");
+
 		var controllerUnits =[];
 		var ImgFigures = [];
 		//console.log(imageDatas);
