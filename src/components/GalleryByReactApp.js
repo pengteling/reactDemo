@@ -36,9 +36,12 @@ class ImgFigure extends React.Component{
 	}
 	render() {
 		//console.log("render 子组件");
-
 		let styleObj = {};
-		styleObj = this.props.data.pos;		
+		styleObj = this.props.data.pos;	
+		if(styleObj.transform=="rotate(0deg)")	{
+			//console.log("0")
+			delete styleObj.transform //如果为0 则删除这个属性 避免transform被覆盖
+		}
 		let classnamestr = this.props.data.isinverse? "isback":""	
 		return (
 			<figure className={classnamestr}  style={styleObj} onClick={this.handleClick} ref="imgC">
@@ -56,10 +59,8 @@ class GalleryByReactApp extends React.Component{
 	constructor(props) {
 		super(props);		
 		this.state={
-
 			/* 状态 定义每个图片的状态信息 位置 旋转 是否翻转 是否居中 */
 			imgdataArr:[
-
 				/*{
 					pos:{
 						left:0,
@@ -73,7 +74,6 @@ class GalleryByReactApp extends React.Component{
 					desc:""
 				}*/
 			]
-
 		}
 	}
 	getImgPos(iscenter){ //获取单个图片pos 随机和中心图片
@@ -104,7 +104,7 @@ class GalleryByReactApp extends React.Component{
 				top: rndy +"px",
 				zIndex:zIndex,
 				//rotate : rndrotate +"deg"			
-				//transform: "rotate("+rndrotate +"deg)"
+				transform: "rotate("+rndrotate +"deg)"
 		}
 	}
 	layoutImage(centerindex){
@@ -150,7 +150,7 @@ class GalleryByReactApp extends React.Component{
 		imageDatas.map(function(val,key){			
 			ImgFigures.push(<ImgFigure key={key} ref={'img'+key} docenter={this.tocenter(key)} doinverse={this.toinverse(key)} data={this.state.imgdataArr[key]} />);
 		
-			//controllerUnits.push(<ControllerUnits key={key} index={key} ref={'nav'+key}  centerindex={this.state.img_center_index} dolayout={this.layoutImage}  />);
+			controllerUnits.push(<ControllerUnits key={key} ref={'img'+key} docenter={this.tocenter(key)} doinverse={this.toinverse(key)} data={this.state.imgdataArr[key]}  />);
 
 		}.bind(this));
 		return(
@@ -159,7 +159,7 @@ class GalleryByReactApp extends React.Component{
 					{ImgFigures}
 				</section>
 				<nav className="controller-nav">
-					
+					{controllerUnits}
 				</nav>				
 			</section>
 			)
@@ -168,8 +168,30 @@ class GalleryByReactApp extends React.Component{
 	
 
 
-/*class ControllerUnits extends React.Component{
-}*/
+class ControllerUnits extends React.Component{
+	constructor(props) {
+		super(props);		
+		this.handleClick = this.handleClick.bind(this);
+	}
+	handleClick(ev){
+		ev.stopPropagation();
+		ev.preventDefault();
+		if(this.props.data.iscenter){
+			this.props.doinverse();
+
+		}else{
+			//console.log(this.props);
+			this.props.docenter();
+		}
+	}
+	render(){
+		let classnamestr = this.props.data.iscenter? "active":""
+		classnamestr += (this.props.data.isinverse?" inverse":"")
+		return(			
+				<span className={classnamestr} onClick={this.handleClick} ref="navC"></span>			
+			);
+	}
+}
 
 ReactDOM.render(
 	<GalleryByReactApp/>

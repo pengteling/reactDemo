@@ -3,7 +3,8 @@ cnpm i webpack webpack-dev-server jsx-loader react-hot-loader style-loader css-l
 
 */
 var webpack = require('webpack');
-
+var ExtractTextPlugin = require("extract-text-webpack-plugin"); //css文件独立出来
+var HtmlWebpackPlugin = require('html-webpack-plugin'); //
 
 module.exports = {
     // entry: './js/entry.js',
@@ -14,9 +15,10 @@ module.exports = {
         './src/components/GalleryByReactApp.js'
     ],
     output: {
-        path: __dirname + '/js/',
-        filename: 'bundle.js',
-        publicPath: '/js/'
+        path: __dirname + '/build/',
+        filename: 'js/app.js',
+        //publicPath: '/build/'  '开发时'
+       publicPath: './', //发布时
     },
     module: {
         loaders: [{
@@ -28,7 +30,7 @@ module.exports = {
             }
         }, {
             test: /\.scss$/,
-            loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}!sass?sourceMap'
+            loader: ExtractTextPlugin.extract('','css-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}!sass?sourceMap')
         }, {
             test: /\.css$/,
             loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}'
@@ -37,12 +39,36 @@ module.exports = {
             loader: 'json-loader'
         }, {
             test: /\.(png|jpe?g|gif|eot|svg|ttf|woff2?)$/,
-            loader: "url-loader?limit=8192"
+            loader: "url-loader?limit=8192&name=images/[name].[ext]" //[hash:8].
         }]
     },
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         //new webpack.NoErrorsPlugin()
+
+        //提取公共commjs
+        new webpack.optimize.CommonsChunkPlugin("commons", "js/commons.js"),
+        //提取require的css 合并到某个文件
+        new ExtractTextPlugin("./css/[name].css", {
+            allChunks: true
+        }),
+        new HtmlWebpackPlugin({ // Also generate a test.html            
+            template: 'index.html',
+            filename: 'template.html'
+        }),
+        //定义环境 程序中判断
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        //压缩js 除$ jQuery
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: {
+                except: ['$', 'jQuery']
+            },
+            compress: {
+                warnings: false
+            }
+        })
     ]
 };
