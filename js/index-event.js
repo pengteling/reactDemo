@@ -10,18 +10,28 @@ import ReactDOM,{findDOMNode} from 'react-dom';
 import $ from 'jquery';
 
 var TestClickComponent = React.createClass({
+	getInitialState() {
+		return {
+			ishid : false
+		}
+	}
 	handleClick:function(){
-		if(this.refs.tip.style.display!='none'){
-			this.refs.tip.style.display='none';
-		}
-		else{
-			this.refs.tip.style.display='';
-		}
+		// if(this.refs.tip.style.display!='none'){
+		// 	this.refs.tip.style.display='none';
+		// }
+		// else{
+		// 	this.refs.tip.style.display='';
+		// }
+		this.setState({
+			ishid : !this.state.ishid
+		})
 	},
 	render:function(){
-		return (
+		var styleObj = { display: "block" };		
+		var styleObj = styleObj this.state.ishid ? {display:"block"},{display:"none"};
+		return (			
 			<div>
-				<button onClick={this.handleClick}>显示|隐藏</button><span ref="tip">测试点击</span>
+				<button style={styleObj} onClick={this.handleClick}>显示|隐藏</button><span ref="tip">测试点击</span>
 			</div>
 			);
 	}
