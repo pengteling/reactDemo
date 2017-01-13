@@ -11,8 +11,8 @@ module.exports = {
     entry: [
         //'webpack-dev-server/client?http://127.0.0.1:8080', // WebpackDevServer host and port
         //'webpack/hot/only-dev-server',
-        //'./js/index.js' // Your app始s entry point
-        './src/components/GalleryByReactApp.js'
+        './js/index.js' // Your app始s entry point
+        //'./src/components/GalleryByReactApp.js'
     ],
     output: {
         path: __dirname + '/build/',
