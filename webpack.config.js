@@ -15,10 +15,10 @@ module.exports = {
         //'./src/components/GalleryByReactApp.js'
     ],
     output: {
-        path: __dirname + '/build/',
+        path: __dirname + '/dist/',
         filename: 'js/app.js',
-        //publicPath: '/build/'  '开发时'
-       publicPath: './', //发布时
+        publicPath: '/dist/'  '开发时'
+       //publicPath: './', //发布时
     },
     module: {
         loaders: [{
