@@ -76,3 +76,4 @@ ReactDOM.render(
 
 
 //父组件  学校 内部 state 班主任   -》 props  班主任   班级 接收props 班主任  state:   班长  今天多少人交作业 打扫卫生 state
+//作业 ： 新浪微博发布框
