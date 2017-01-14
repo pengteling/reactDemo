@@ -17,7 +17,7 @@ module.exports = {
     output: {
         path: __dirname + '/dist/',
         filename: 'js/app.js',
-        publicPath: '/dist/'  '开发时'
+        publicPath: '/dist/'  //'开发时'
        //publicPath: './', //发布时
     },
     module: {
