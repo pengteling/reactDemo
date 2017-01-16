@@ -1,79 +1,71 @@
-import React from 'react'
-import ReactDOM,{findDOMNode} from 'react-dom'
-//import $ from 'jquery';
-class Content extends React.Component{
-	constructor(props) {
-		super(props);
-		this.state={
-			iptContent:""
+// var React = require('react');
+// console.log("t");
+// import React from 'react';
+// import Router from 'react-router';
+
+//var React = require("react");
+//var ReactDOM = require("react-dom");
+import React from 'react';
+import ReactDOM,{findDOMNode} from 'react-dom';
+import $ from 'jquery';
+
+var TestClickComponent = React.createClass({
+	getInitialState() {
+		return {
+			ishid : false
 		}
-		this.handleBlur = this.handleBlur.bind(this)  //绑定this
-		this.handleClick = this.handleClick.bind(this)
-	}
-	handleBlur(e){
+	},
+	handleClick:function(){
+		// if(this.refs.tip.style.display!='none'){
+		// 	this.refs.tip.style.display='none';
+		// }
+		// else{
+		// 	this.refs.tip.style.display='';
+		// }
 		this.setState({
-			iptContent :e.target.value
+			ishid : !this.state.ishid
 		})
-	}
-	handleClick(){
-		//this.setState({
-			//提交评论
-			//iptContent: this.
-
-		//})
-		//console.log(this.props)
-		console.log("评论："+this.props.replyto)
-		console.log("内容："+this.state.iptContent)
-	}
-	handleTest(){ //箭头函数 每次render的时候
-		console.log(this)
-	}
-	
-	render(){
-		return (
+	},
+	render:function(){
+		var styleObj = { display: "block" };		
+		var styleObj = this.state.ishid ? {display:"none"}:{display:"block"};
+		return (			
 			<div>
-			<textarea name="content" id="content" cols="30" rows="10" onBlur={this.handleBlur} onChange={()=>this.handleTest()}>{this.state.iptContent}</textarea>
-			<input type="button" value ="评论" onClick={this.handleClick}/>
+				<button onClick={this.handleClick}>显示|隐藏</button><span  style={styleObj} ref="tip">测试点击</span>
 			</div>
-			)
+			);
 	}
-}
-class Comment extends React.Component{
-	constructor(props) {
-		super(props);
-		this.handleChange = this.handleChange.bind(this)
-		this.state={
-			names:["Tom", "Jim" ,"Kate"],
-			selectName:""
+});
+var TestInputComponent = React.createClass({
+	getInitialState() {
+		return{
+			inputContent:''
 		}
-	}
-	handleChange(e){
-		this.setState({selectName: e.target.value })
-	}
-	render(){
-		let namelist =[]
-		this.state.names.map(
-			(val) => {
-			namelist.push(<option value={val}>{val}</option>)
-			}
-
-			//function(val){}
-		)
-		return (
+	},
+	handleChange(event){
+		event.preventDefault(); //阻止 默认事件
+		event.stopPropagation(); //阻止冒泡
+		console.log(findDOMNode(this));
+		console.log(this.props.children);
+		this.setState({
+			//inputContent : event.target.value
+			inputContent: $(event.target).val()
+		})
+		
+	},
+	render: function(){
+		return(
 			<div>
-			<select name="selectname" id="selectname" onChange={this.handleChange}>
-			<option value="">请选择要回复的对象</option>{namelist}</select>
-			<Content replyto={this.state.selectName} />
+				<input type="text" onChange={this.handleChange} /><span>{this.state.inputContent}</span>
 			</div>
-			)
+			);
 	}
-}
-
+});
 ReactDOM.render(
-	<Comment />,
-	document.getElementById("app")
-	)
-
-
-//父组件  学校 内部 state 班主任   -》 props  班主任   班级 接收props 班主任  state:   班长  今天多少人交作业 打扫卫生 state
-//作业 ： 新浪微博发布框
+	<div>
+        <TestClickComponent />
+        <br/><br/>
+        <TestInputComponent />
+    </div>,
+    document.getElementById('app')
+);
