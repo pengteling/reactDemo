@@ -23,9 +23,9 @@ class MyForm  extends React.Component{
 		this.handleChange = this.handleChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
 	}
-	handleChange(name,e){ //合并到一个handler
+	handleChange(e){ //合并到一个handler
 		this.setState({
-			[name] : name == "checked" ? e.target.checked : e.target.value
+			[e.target.name] : e.target.name == "checked" ? e.target.checked : e.target.value
 		})
 	}
 	
@@ -37,12 +37,12 @@ class MyForm  extends React.Component{
 	render(){
 		return(
 			<div>
-				<input type="text" placeholder="请输入姓名" name="username" id="username" onChange={this.handleChange.bind(this,"username")} /><br/>
-				<select name="sex" id="sex" onChange={this.handleChange.bind(this,"sex")} value={this.state.sex}>
+				<input type="text" placeholder="请输入姓名" name="username" id="username" onChange={this.handleChange} /><br/>
+				<select name="sex" id="sex" onChange={this.handleChange} value={this.state.sex}>
 					<option value="1">男</option>
 					<option value="0">女</option>
 				</select><br/>
-				<label htmlFor="agree">同意</label><input type="checkbox" name="agree" id="agree" onChange={this.handleChange.bind(this,"checked")} /><br/>
+				<label htmlFor="agree">同意</label><input type="checkbox" name="checked" id="checked" onChange={this.handleChange} /><br/>
 				<input type="submit" value="提交" onClick ={this.handleSubmit}/>
 			</div>
 			)
