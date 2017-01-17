@@ -16,30 +16,19 @@ class MyForm  extends React.Component{
 		super(props);
 		this.state={
 			username : "",
-			sex: "男",
+			sex: "1",
 			checked : false
 		}
-		this.handleChangeUsername = this.handleChangeUsername.bind(this)
-		this.handleChangeSex = this.handleChangeSex.bind(this)
-		this.handleChangeAgree = this.handleChangeAgree.bind(this)
+		
+		this.handleChange = this.handleChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
 	}
-	handleChangeUsername(e){
+	handleChange(name,e){ //合并到一个handler
 		this.setState({
-			username : e.target.value
+			[name] : name == "checked" ? e.target.checked : e.target.value
 		})
 	}
-	handleChangeSex(e){
-		//console.log(e.target.value);
-		this.setState({
-			sex : e.target.value
-		})
-	}
-	handleChangeAgree(e){
-		this.setState({
-			checked : e.target.checked
-		})
-	}
+	
 	handleSubmit(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -48,12 +37,12 @@ class MyForm  extends React.Component{
 	render(){
 		return(
 			<div>
-				<input type="text" placeholder="请输入姓名" name="username" id="username" onChange={this.handleChangeUsername} /><br/>
-				<select name="sex" id="sex" onChange={this.handleChangeSex}>
+				<input type="text" placeholder="请输入姓名" name="username" id="username" onChange={this.handleChange.bind(this,"username")} /><br/>
+				<select name="sex" id="sex" onChange={this.handleChange.bind(this,"sex")} value={this.state.sex}>
 					<option value="1">男</option>
 					<option value="0">女</option>
 				</select><br/>
-				<label htmlFor="agree">同意</label><input type="checkbox" name="agree" id="agree" onChange={this.handleChangeAgree} /><br/>
+				<label htmlFor="agree">同意</label><input type="checkbox" name="agree" id="agree" onChange={this.handleChange.bind(this,"checked")} /><br/>
 				<input type="submit" value="提交" onClick ={this.handleSubmit}/>
 			</div>
 			)
