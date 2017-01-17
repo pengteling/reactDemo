@@ -9,41 +9,31 @@ import React from 'react';
 import ReactDOM,{findDOMNode} from 'react-dom';
 //import $ from 'jquery';
 //require("./../sass/main.scss");
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Css from "./../sass/main.scss";
 
-class MyForm  extends React.Component{
+class MyCss3Animation  extends React.Component{
 	constructor(props) {
-		super(props);
+		super(props)	
+		this.handleClick = this. handleClick.bind(this)	
 		this.state={
-			username : "",
-			sex: "1",
-			checked : false
+			ishid:false
 		}
-		
-		this.handleChange = this.handleChange.bind(this)
-		this.handleSubmit = this.handleSubmit.bind(this)
 	}
-	handleChange(e){ //合并到一个handler
+	handleClick(){
 		this.setState({
-			[e.target.name] : e.target.name == "checked" ? e.target.checked : e.target.value
+			ishid :!this.state.ishid
 		})
-	}
-	
-	handleSubmit(e){
-		e.preventDefault();
-		e.stopPropagation();
-		console.log(this.state);
+		
 	}
 	render(){
+		//var ani = this.state.ishid?  <h3 key="123">中国人</h3> : <h3 key="1">2</h3>
 		return(
 			<div>
-				<input type="text" placeholder="请输入姓名" name="username" id="username" onChange={this.handleChange} /><br/>
-				<select name="sex" id="sex" onChange={this.handleChange} value={this.state.sex}>
-					<option value="1">男</option>
-					<option value="0">女</option>
-				</select><br/>
-				<label htmlFor="agree">同意</label><input type="checkbox" name="checked" id="checked" onChange={this.handleChange} /><br/>
-				<input type="submit" value="提交" onClick ={this.handleSubmit}/>
+				<button onClick={this.handleClick}>点击</button>
+				<ReactCSSTransitionGroup transitionName = "animation" key="ptl" >
+					
+				</ReactCSSTransitionGroup>
 			</div>
 			)
 	}
@@ -51,6 +41,6 @@ class MyForm  extends React.Component{
 }
 
 ReactDOM.render(
-	<MyForm />,
+	<MyCss3Animation />,
     document.getElementById('app')
 );

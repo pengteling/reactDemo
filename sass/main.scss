@@ -1,6 +1,23 @@
 body{
 	font-size:14px;
 }
-*{
-	margin :10px;
+
+
+@mixin react-animate-css($cssname:animation){
+	.#{$cssname}{
+		opacity: 0.01;
+		transition: opacity 1s ease-in;
+	}
+	.#{$cssname}-enter.#{$cssname}-enter-active{
+		opacity: 1;
+	}
+	.#{$cssname}-leave{
+		opacity: 1;
+		transition: opacity 1s ease-in;
+	}
+	.#{$cssname}-leave.#{$cssname}-leave-active{
+		opacity: 0.01;
+	}
 }
+
+@include react-animate-css("animate")
