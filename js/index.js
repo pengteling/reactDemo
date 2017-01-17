@@ -7,65 +7,61 @@
 //var ReactDOM = require("react-dom");
 import React from 'react';
 import ReactDOM,{findDOMNode} from 'react-dom';
-import $ from 'jquery';
+//import $ from 'jquery';
+//require("./../sass/main.scss");
+import Css from "./../sass/main.scss";
 
-var TestClickComponent = React.createClass({
-	getInitialState() {
-		return {
-			ishid : false
+class MyForm  extends React.Component{
+	constructor(props) {
+		super(props);
+		this.state={
+			username : "",
+			sex: "男",
+			checked : false
 		}
-	},
-	handleClick:function(){
-		// if(this.refs.tip.style.display!='none'){
-		// 	this.refs.tip.style.display='none';
-		// }
-		// else{
-		// 	this.refs.tip.style.display='';
-		// }
-		this.setState({
-			ishid : !this.state.ishid
-		})
-	},
-	render:function(){
-		var styleObj = { display: "block" };		
-		var styleObj = this.state.ishid ? {display:"none"}:{display:"block"};
-		return (			
-			<div>
-				<button onClick={this.handleClick}>显示|隐藏</button><span  style={styleObj} ref="tip">测试点击</span>
-			</div>
-			);
+		this.handleChangeUsername = this.handleChangeUsername.bind(this)
+		this.handleChangeSex = this.handleChangeSex.bind(this)
+		this.handleChangeAgree = this.handleChangeAgree.bind(this)
+		this.handleSubmit = this.handleSubmit.bind(this)
 	}
-});
-var TestInputComponent = React.createClass({
-	getInitialState() {
-		return{
-			inputContent:''
-		}
-	},
-	handleChange(event){
-		event.preventDefault(); //阻止 默认事件
-		event.stopPropagation(); //阻止冒泡
-		console.log(findDOMNode(this));
-		console.log(this.props.children);
+	handleChangeUsername(e){
 		this.setState({
-			//inputContent : event.target.value
-			inputContent: $(event.target).val()
+			username : e.target.value
 		})
-		
-	},
-	render: function(){
+	}
+	handleChangeSex(e){
+		//console.log(e.target.value);
+		this.setState({
+			sex : e.target.value
+		})
+	}
+	handleChangeAgree(e){
+		this.setState({
+			checked : e.target.checked
+		})
+	}
+	handleSubmit(e){
+		e.preventDefault();
+		e.stopPropagation();
+		console.log(this.state);
+	}
+	render(){
 		return(
 			<div>
-				<input type="text" onChange={this.handleChange} /><span>{this.state.inputContent}</span>
+				<input type="text" placeholder="请输入姓名" name="username" id="username" onChange={this.handleChangeUsername} /><br/>
+				<select name="sex" id="sex" onChange={this.handleChangeSex}>
+					<option value="1">男</option>
+					<option value="0">女</option>
+				</select><br/>
+				<label htmlFor="agree">同意</label><input type="checkbox" name="agree" id="agree" onChange={this.handleChangeAgree} /><br/>
+				<input type="submit" value="提交" onClick ={this.handleSubmit}/>
 			</div>
-			);
+			)
 	}
-});
+
+}
+
 ReactDOM.render(
-	<div>
-        <TestClickComponent />
-        <br/><br/>
-        <TestInputComponent />
-    </div>,
+	<MyForm />,
     document.getElementById('app')
 );
