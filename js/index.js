@@ -21,19 +21,20 @@ class Box extends React.Component {
 	constructor(props) {
 		super(props);		
 	}
-	componentWillApear(callback){
+	componentWillAppear(callback){ //初次加载
+		
 		const el = ReactDOM.findDOMNode(this);
-		console.log("componentWillApear");  //? why not work
-		callback();
-		//const el = ReactDOM.findDOMNode(this);
-		//TweenMax.fromTo(el, 0.3, {x:300 ,y: 0, opacity: 0}, {x:0,y: 0, opacity: 1, onComplete: callback});
+		TweenMax.fromTo(el, 0.3, {x:300 ,y: 0, opacity: 0}, {x:0,y: 0, opacity: 1, onComplete: callback});
+		//callback();
+
+		console.log("componentWillApear");  //
 		//callback();
 		
 	}
 	componentDidAppear(){
 		console.log("componentDidAppear");
 		const el = ReactDOM.findDOMNode(this);
-		TweenMax.fromTo(el, 0.3, {x:300 ,y: 0, opacity: 0}, {x:0,y: 0, opacity: 1, onComplete: function(){}});
+		TweenMax.fromTo(el, 0.3, {x:0 ,y: 0, opacity: 0}, {x:300,y: 100, opacity: 1, onComplete: function(){}});
 	}
     componentWillEnter (callback) {
     	console.log("componentWillEnter");
