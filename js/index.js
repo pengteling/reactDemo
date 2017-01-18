@@ -13,56 +13,97 @@ import ReactDOM,{findDOMNode} from 'react-dom';
 import ReactTransitionGroup from 'react-addons-transition-group' // ES6
 import Css from "./../sass/main.scss";
 
-class ChildComponent extends React.Component{
-	componentWillAppear(){
-		console.log("test")
+// 导入通过 NPM 安装的 GSAP 
+import TweenMax from 'gsap';
+
+
+class Box extends React.Component {
+	constructor(props) {
+		super(props);		
+	}
+	componentWillApear(callback){
+		const el = ReactDOM.findDOMNode(this);
+		console.log("componentWillApear");  //? why not work
+		callback();
+		//const el = ReactDOM.findDOMNode(this);
+		//TweenMax.fromTo(el, 0.3, {x:300 ,y: 0, opacity: 0}, {x:0,y: 0, opacity: 1, onComplete: callback});
+		//callback();
+		
 	}
 	componentDidAppear(){
-		console.log("componentDidAppear")
+		console.log("componentDidAppear");
+		const el = ReactDOM.findDOMNode(this);
+		TweenMax.fromTo(el, 0.3, {x:300 ,y: 0, opacity: 0}, {x:0,y: 0, opacity: 1, onComplete: function(){}});
 	}
-	componentDidMount() {
-		console.log("componentDidMount")
-	}
-	render(){
-		return (
-			<div>{this.props.prop}</div>
-			)
-	}
-}
-class MyTest extends React.Component{
-	constructor(props) {
-		super(props);				
-		this.state={
-			items:["test"]
-		}		
-		this.handleClick = this.handleClick.bind(this)
-	}		
+    componentWillEnter (callback) {
+    	console.log("componentWillEnter");
+        const el = ReactDOM.findDOMNode(this);
+        //callback();
+        TweenMax.fromTo(el, 0.3, {x:0 ,y: 100, opacity: 0}, {x:300,y: 0, opacity: 1, onComplete: callback});
+        //var that=this;
+       // setTimeout(that.callback,3000);
+    }
+    componentDidEnter() {
+    	console.log("componentDidEnter")    	
+    }
 
-	handleClick(){
-		this.setState({
-			items : ["test1","test2"]
-		})
-		console.log("click")
+    componentWillLeave (callback) {
+    	console.log("componentWillLeave");
+        const el = ReactDOM.findDOMNode(this);
+        TweenMax.fromTo(el, 0.3, {x:300 , y: 0, opacity: 1}, {x:0 ,y: -100, opacity: 0, onComplete: callback});
+    }
+    componentDidLeave() {
+	    console.log('componentDidLeave');
 	}
-	render(){		
-		var divs =[]
-		this.state.items.map(function(v,i){
-			divs.push(
-				<ChildComponent key={i} prop={v} />
-				)
-		})
-		return(
-			<div>
-			<button onClick={this.handleClick}>点击切换</button>
-			<ReactTransitionGroup  component="div">
-				   {divs}
-			</ReactTransitionGroup>				
-			</div>
-			)
-	}
+	// componentDidMount() {
+	// 	console.log("componentDidMount")
+	// }
+
+    render () {
+        return (
+            <div
+                style={{
+                    width: '100px',
+                    height: '100px',
+                    margin: '100px',
+                    borderRadius: '50%',
+                    backgroundColor: 'red'
+                }}>
+            </div>
+        );
+    }
 }
+
+class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state ={
+			show :true
+		}
+		this.handleToggle = this.handleToggle.bind(this)
+	}
+    
+
+    handleToggle() {
+        this.setState({
+            show: !this.state.show
+        });
+    }
+
+    render () {
+        return (
+            <div className="wrapper">
+                <button onClick={this.handleToggle}>Toggle</button>
+                <ReactTransitionGroup>
+                    { this.state.show && <Box key="a"></Box> }                   
+                </ReactTransitionGroup>
+            </div>
+        )
+    }
+}
+
 
 ReactDOM.render(
-	<MyTest />,
+	<App />,
     document.getElementById('app')
 );
