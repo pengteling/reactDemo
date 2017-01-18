@@ -12,43 +12,49 @@ import ReactDOM,{findDOMNode} from 'react-dom';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Css from "./../sass/main.scss";
 
-class MyCss3Animation  extends React.Component{
-	constructor(props) {
-		super(props)	
-		this.handleClick = this. handleClick.bind(this)	
-		this.state={
-			ishid:false,
-			index:Math.random()
-		}
-	}
-	handleClick(){
-		this.setState({
-			ishid :!this.state.ishid,
-			index:Math.random()
-		})
-		
-	}
-	render(){
-		//var ani = this.state.ishid?  <h3 key="123">中国人</h3> : <h3 key="1">2</h3>
-		var css = this.state.ishid? { display:"none"} : {display:"block"}
-		var html = (
-			<div key={this.index}  style={css}>
-			test
-			</div>
-			)
-		return(
-			<div>
-				<button onClick={this.handleClick}>点击</button>
-				<ReactCSSTransitionGroup transitionName = "animate" transitionEnterTimeout={5000} transitionLeave={true} >
-					{html}
-				</ReactCSSTransitionGroup>
-			</div>
-			)
-	}
+class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {items: ['hello', 'world', 'click', 'me']};
+    this.handleAdd = this.handleAdd.bind(this);
+  }
 
+  handleAdd() {
+    const newItems = this.state.items.concat([
+      prompt('Enter some text')
+    ]);
+    this.setState({items: newItems});
+  }
+
+  handleRemove(i) {
+    let newItems = this.state.items.slice();
+    newItems.splice(i, 1);
+    this.setState({items: newItems});
+  }
+
+  render() {
+    const items = this.state.items.map((item, i) => (
+      <div key={item} onClick={() => this.handleRemove(i)}>
+        {item}
+      </div>
+    ));
+
+    return (
+      <div>
+        <button onClick={this.handleAdd}>Add Item</button>
+        <ReactCSSTransitionGroup
+          transitionName="animate"
+          transitionEnterTimeout={3000}
+          transitionLeaveTimeout={3000}>
+          {items}
+        </ReactCSSTransitionGroup>
+      </div>
+    );
+  }
 }
 
+
 ReactDOM.render(
-	<MyCss3Animation />,
+	<TodoList />,
     document.getElementById('app')
 );

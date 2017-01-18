@@ -4,16 +4,16 @@ body{
 
 
 @mixin react-animate-css($cssname:animation){
-	.#{$cssname}{
+	.#{$cssname}-enter{
 		opacity: 0.01;
-		transition: opacity 1s ease-in;
+		transition: opacity 2s ease-in;
 	}
 	.#{$cssname}-enter.#{$cssname}-enter-active{
 		opacity: 1;
 	}
 	.#{$cssname}-leave{
 		opacity: 1;
-		transition: opacity 1s ease-in;
+		transition: opacity 2s ;
 	}
 	.#{$cssname}-leave.#{$cssname}-leave-active{
 		opacity: 0.01;
