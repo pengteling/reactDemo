@@ -4,6 +4,14 @@ body{
 
 
 @mixin react-animate-css($cssname:animation){
+/* 第一次载入动画 */
+	/* .#{$cssname}-appear{
+		opacity: 0.01;
+		transition: opacity 2s ease-in;
+	}
+	.#{$cssname}-appear.#{$cssname}-appear-active{
+		opacity: 1;
+	} */
 	.#{$cssname}-enter{
 		opacity: 0.01;
 		transition: opacity 2s ease-in;
