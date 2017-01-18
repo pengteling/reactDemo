@@ -9,54 +9,60 @@ import React from 'react';
 import ReactDOM,{findDOMNode} from 'react-dom';
 //import $ from 'jquery';
 //require("./../sass/main.scss");
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+//import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactTransitionGroup from 'react-addons-transition-group' // ES6
 import Css from "./../sass/main.scss";
 
-class TodoList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {items: ['hello', 'world', 'click', 'me']};
-    this.handleAdd = this.handleAdd.bind(this);
-  }
+class ChildComponent extends React.Component{
+	componentWillAppear(){
+		console.log("test")
+	}
+	componentDidAppear(){
+		console.log("componentDidAppear")
+	}
+	componentDidMount() {
+		console.log("componentDidMount")
+	}
+	render(){
+		return (
+			<div>{this.props.prop}</div>
+			)
+	}
+}
+class MyTest extends React.Component{
+	constructor(props) {
+		super(props);				
+		this.state={
+			items:["test"]
+		}		
+		this.handleClick = this.handleClick.bind(this)
+	}		
 
-  handleAdd() {
-    const newItems = this.state.items.concat([
-      prompt('Enter some text')
-    ]);
-    this.setState({items: newItems});
-  }
-
-  handleRemove(i) {
-    let newItems = this.state.items.slice();
-    newItems.splice(i, 1);
-    this.setState({items: newItems});
-  }
-
-  render() {
-    const items = this.state.items.map((item, i) => (
-      <div key={item} onClick={() => this.handleRemove(i)}>
-        {item}
-      </div>
-    ));
-
-    return (
-      <div>
-        <button onClick={this.handleAdd}>Add Item</button>
-        <ReactCSSTransitionGroup
-       //  transitionAppear={true}
-      	// transitionAppearTimeout={500}
-          transitionName="animate"
-          transitionEnterTimeout={3000}
-          transitionLeaveTimeout={3000}>
-          {items}
-        </ReactCSSTransitionGroup>
-      </div>
-    );
-  }
+	handleClick(){
+		this.setState({
+			items : ["test1","test2"]
+		})
+		console.log("click")
+	}
+	render(){		
+		var divs =[]
+		this.state.items.map(function(v,i){
+			divs.push(
+				<ChildComponent key={i} prop={v} />
+				)
+		})
+		return(
+			<div>
+			<button onClick={this.handleClick}>点击切换</button>
+			<ReactTransitionGroup  component="div">
+				   {divs}
+			</ReactTransitionGroup>				
+			</div>
+			)
+	}
 }
 
-
 ReactDOM.render(
-	<TodoList />,
+	<MyTest />,
     document.getElementById('app')
 );
