@@ -13,7 +13,7 @@ require("./../sass/main.scss");
 import Perf from 'react-addons-perf';
 //import Immutable from 'immutable';
 import update from 'react-addons-update'; // ES6 
-
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 const __DEV__  = true ;
 
 if(__DEV__){
@@ -52,8 +52,16 @@ class SurveyList extends React.Component{
     }
     handleChange(labelId){
 
-        
-        const newData = update(this.state, { items: { 0 : { checked: {$set : true } } }}         
+        //console.log(labelId);
+        const newData = update(this.state, { 
+        	items: {
+        	        	$apply: function(x){ 
+        	        		x[labelId].checked = !x[labelId].checked;
+        	        		return x  }
+        	 	} 
+        	 	
+        	
+        }         
         );
         console.log(newData);
         this.setState(newData);
@@ -79,10 +87,17 @@ class Checkbox extends React.Component{
     constructor(props) {
         super(props); 
         this.handleChange = this.handleChange.bind(this);       
+        //this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);  //PureRenderMixin
+
     }
     handleChange(){
         //this.props.onChange(this.props.label.id);
         this.props.onChange();
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+    	console.log(nextProps.label);
+    	console.log(this.props.label);
+    	return nextProps.label.checked !== this.props.label.checked;
     }
     render(){
         return(
