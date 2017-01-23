@@ -59,16 +59,16 @@ module.exports = {
         }),
         //定义环境 程序中判断
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production')
+            'process.env.NODE_ENV': JSON.stringify('development')
         }),
         //压缩js 除$ jQuery
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: {
-                except: ['$', 'jQuery']
-            },
-            compress: {
-                warnings: false
-            }
-        })
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: {
+        //         except: ['$', 'jQuery']
+        //     },
+        //     compress: {
+        //         warnings: false
+        //     }
+        // })
     ]
 };

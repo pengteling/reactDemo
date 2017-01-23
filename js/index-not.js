@@ -11,8 +11,7 @@ import ReactDOM,{findDOMNode} from 'react-dom';
 require("./../sass/main.scss");
 
 import Perf from 'react-addons-perf';
-//import Immutable from 'immutable';
-import update from 'react-addons-update'; // ES6 
+import Immutable from 'immutable';
 
 const __DEV__  = true ;
 
@@ -50,18 +49,18 @@ class SurveyList extends React.Component{
             ]
         }
     }
-    handleChange(labelId){
+    handleChange(id){
 
-        
-        const newData = update(this.state, { items: { 0 : { checked: {$set : true } } }}         
-        );
-        console.log(newData);
-        this.setState(newData);
-        
+        //let newitem = this.state.items;
+        //console.log(id);
+        let newitem = this.state.items.concat([]);
+        newitem[id].checked = !newitem[id].checked;
+        this.setState({
+            items: newitem
+        })
     }
     render(){
         let that = this;
-        
         return(
             <div>
             {

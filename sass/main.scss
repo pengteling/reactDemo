@@ -2,30 +2,3 @@ body{
 	font-size:14px;
 }
 
-
-@mixin react-animate-css($cssname:animation){
-/* 第一次载入动画 */
-	/* .#{$cssname}-appear{
-		opacity: 0.01;
-		transition: opacity 2s ease-in;
-	}
-	.#{$cssname}-appear.#{$cssname}-appear-active{
-		opacity: 1;
-	} */
-	.#{$cssname}-enter{
-		opacity: 0.01;
-		transition: opacity 2s ease-in;
-	}
-	.#{$cssname}-enter.#{$cssname}-enter-active{
-		opacity: 1;
-	}
-	.#{$cssname}-leave{
-		opacity: 1;
-		transition: opacity 2s ;
-	}
-	.#{$cssname}-leave.#{$cssname}-leave-active{
-		opacity: 0.01;
-	}
-}
-
-@include react-animate-css("animate")
