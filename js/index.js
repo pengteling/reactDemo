@@ -26,7 +26,7 @@ class SurveyList extends React.PureComponent{
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.state= {
-            items:[
+            items:Immutable.fromJS([
             {
                 id :0,
                 text:"你喜欢吃萝卜吗",
@@ -48,26 +48,36 @@ class SurveyList extends React.PureComponent{
                 off:"不喜欢",
                 checked:false
             }
-            ]
+            ])
         }
-    }
+        }
     handleChange(labelId){
 
+    	var newState = this.state.items.setIn([labelId,"checked"],!this.state.items.getIn([labelId,"checked"]));
+    	
+    	this.setState({
+    		items: newState
+    	});
+
+ // this.setState(function() { 
+ // 	items: update(this.state.items, {0: { text : {$set :"123"}}}) 
+ // });
+
+//  this.setState((prevState, props) => {
+//   return {
+//   	items: update(prevState.items, {0: { text : {$set :"123"}}}) 
+//   };
+// })
+//this.setState( state => update( state,{ items: { 0 : { text : {$set : 123} }} }) )
+    	//console.log(newState)
         //console.log(labelId);
-        // const newData = update(this.state, { 
-        //     items: {
-        //                 $apply: function(x){ 
-        //                     x[labelId].checked = !x[labelId].checked;
-        //                     return x  }
-        //         } 
-                
-            
-        // }         
-        // );
+        
+
         // //console.log(newData);
         // this.setState(newData);
 
-        /*可以更改  但render了三次 */this.setState( state => update( state,{ items: { 0 : { text : {$set : 123} }} }) )
+        /*可以更改  但render了三次 */
+        //this.setState( state => update( state,{ items: { 0 : { text : {$set : 123} }} }) )
 
         // this.setState(state => {
         //      let itemsArr = state.items;
@@ -87,13 +97,13 @@ class SurveyList extends React.PureComponent{
     }
     render(){
         let that = this;
-        
+        //console.log(this.state)
         return(
             <div>
             {
                 this.state.items.map(function(label,i){
                     //console.log(i)
-                    return <Checkbox label={label} key={i} onChange={that.handleChange.bind(that,i)} />
+                    return <Checkbox label={label} key={i} onChange={that.handleChange.bind(that)} />
                 })
             }
             </div>
@@ -110,16 +120,16 @@ class Checkbox extends React.PureComponent{
     }
     handleChange(){
         //this.props.onChange(this.props.label.id);
-        this.props.onChange();
+        this.props.onChange(this.props.label.get("id"));
     }
     
     render(){
-        console.log(this.props.label.id)
+        console.log(this.props.label.get("id"))
         return(
             <div>
-            {this.props.label.text}
-            <input type="checkbox" checked={this.props.label.checked} onChange={this.handleChange} />
-            {this.props.label.checked? this.props.label.on : this.props.label.off}
+            {this.props.label.get("text")}
+            <input type="checkbox" checked={this.props.label.get("hecked")} onChange={this.handleChange} />
+            {this.props.label.get("checked")? this.props.label.get("on") : this.props.label.get("off")}
             </div>
             )
     }
