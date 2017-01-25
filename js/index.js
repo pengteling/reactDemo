@@ -12,7 +12,8 @@ require("./../sass/main.scss");
 
 import Perf from 'react-addons-perf';
 import Immutable from 'immutable';
-import update from 'react-addons-update'; // ES6 
+//import update from 'react-addons-update'; // ES6 
+import update from 'immutability-helper';
 //import PureRenderMixin from 'react-addons-pure-render-mixin';
 const __DEV__  = true ;
 
