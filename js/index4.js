@@ -21,12 +21,12 @@ if(__DEV__){
     window.Perf = Perf 
 }
 
-class SurveyList extends React.PureComponent{
+class SurveyList extends React.Component{
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.state= {
-            items:Immutable.fromJS([
+            items:[
             {
                 id :0,
                 text:"你喜欢吃萝卜吗",
@@ -48,29 +48,64 @@ class SurveyList extends React.PureComponent{
                 off:"不喜欢",
                 checked:false
             }
-            ])
+            ]
         }
     }
-    handleChange(labelId){      
-       
-        this.setState({
-            items: this.state.items.setIn([labelId,"checked"], !this.state.items.getIn([labelId,"checked"]))
-            //items: this.state.items
-        })
+    handleChange(labelId){
+
+        /*console.log(labelId);
+        const newData = update(this.state, { 
+            items: {
+                        $apply: function(x){ 
+                            x[labelId].checked = !x[labelId].checked;
+                            return x  }
+                } 
+                
+            
+        }         
+        );
+        //console.log(newData);
+        this.setState(newData);*/
+
+        /*可以更改  但render了三次 */
+        // this.setState( state => update( state,{ items: { 0 : { text : {$set : 123} }} }) )
+
+        this.setState(
+            state => update(state, {
+                items : {
+                    $apply : function(x){
+                        console.log(x[labelId].checked);
+                        x[labelId].checked = !x[labelId].checked;
+                        console.log(x[labelId].checked);
+                       // console.log(x)
+                        return x;
+                    }
+                }
+            })
+            ,function(){
+                console.log(this.state);
+            })
+
+        
+
+
+        /*这种不会重新render*/
+        // let newitem = this.state.items;
+        // newitem[labelId].checked = !newitem[labelId].checked;
+        // this.setState({
+        //     items: newitem
+        // })
         
     }
-    componentDidUpdate() {
-        console.log('did update');
-      }
     render(){
         let that = this;
         
         return(
             <div>
             {
-                this.state.items.map(label=>{
+                this.state.items.map(function(label,i){
                     //console.log(i)
-                    return <Checkbox label={label} key={label.get("id")} onChange={that.handleChange.bind(that,label.get("id"))} />
+                    return <Checkbox label={label} key={i} onChange={that.handleChange.bind(that,i)} />
                 })
             }
             </div>
@@ -78,7 +113,7 @@ class SurveyList extends React.PureComponent{
     }
 }
 
-class Checkbox extends React.PureComponent{
+class Checkbox extends React.Component{
     constructor(props) {
         super(props); 
         this.handleChange = this.handleChange.bind(this);       
@@ -89,16 +124,14 @@ class Checkbox extends React.PureComponent{
         //this.props.onChange(this.props.label.id);
         this.props.onChange();
     }
-    componentDidUpdate() {
-        console.log('did update');
-      }
+    
     render(){
-        //console.log(this.props.label.get("id"))
+        console.log(this.props.label.id)
         return(
             <div>
-            {this.props.label.get("text")}
-            <input type="checkbox" checked={this.props.label.get("checked")} onChange={this.handleChange} />
-            {this.props.label.get("checked")? this.props.label.get("on") : this.props.label.get("off")}
+            {this.props.label.text}
+            <input type="checkbox" checked={this.props.label.checked} onChange={this.handleChange} />
+            {this.props.label.checked? this.props.label.on : this.props.label.off}
             </div>
             )
     }

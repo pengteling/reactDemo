@@ -51,26 +51,25 @@ class SurveyList extends React.PureComponent{
             ])
         }
     }
-    handleChange(labelId){      
-       
+    handleChange(labelId){
+        
+        let newitem = this.state.items;
+
+        let newitem2 = newitem.setIn([labelId,"checked"],!newitem.getIn([labelId,"checked"]));
         this.setState({
-            items: this.state.items.setIn([labelId,"checked"], !this.state.items.getIn([labelId,"checked"]))
-            //items: this.state.items
+            items: newitem2
         })
         
     }
-    componentDidUpdate() {
-        console.log('did update');
-      }
     render(){
         let that = this;
         
         return(
             <div>
             {
-                this.state.items.map(label=>{
+                this.state.items.map(function(label,i){
                     //console.log(i)
-                    return <Checkbox label={label} key={label.get("id")} onChange={that.handleChange.bind(that,label.get("id"))} />
+                    return <Checkbox label={label} key={i} onChange={that.handleChange.bind(that,i)} />
                 })
             }
             </div>
@@ -89,11 +88,9 @@ class Checkbox extends React.PureComponent{
         //this.props.onChange(this.props.label.id);
         this.props.onChange();
     }
-    componentDidUpdate() {
-        console.log('did update');
-      }
+    
     render(){
-        //console.log(this.props.label.get("id"))
+        console.log(this.props.label.get("id"))
         return(
             <div>
             {this.props.label.get("text")}
