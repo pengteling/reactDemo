@@ -62,13 +62,13 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('development')
         }),
         //压缩js 除$ jQuery
-        // new webpack.optimize.UglifyJsPlugin({
-        //     mangle: {
-        //         except: ['$', 'jQuery']
-        //     },
-        //     compress: {
-        //         warnings: false
-        //     }
-        // })
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: {
+                except: ['$', 'jQuery']
+            },
+            compress: {
+                warnings: false
+            }
+        })
     ]
 };
