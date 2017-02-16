@@ -5,6 +5,7 @@ cnpm i webpack webpack-dev-server jsx-loader react-hot-loader style-loader css-l
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin"); //css文件独立出来
 var HtmlWebpackPlugin = require('html-webpack-plugin'); //
+var values = require('postcss-modules-values');
 
 module.exports = {
     // entry: './js/entry.js',
@@ -30,10 +31,10 @@ module.exports = {
             }
         }, {
             test: /\.scss$/,
-            loader: ExtractTextPlugin.extract('','css-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}!sass?sourceMap')
+            loader: ExtractTextPlugin.extract('','css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]!postcss-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}!sass?sourceMap')
         }, {
             test: /\.css$/,
-            loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}'
+            loader: 'style-loader!css-loader?modules!postcss-loader!autoprefixer-loader?{browsers:["last 2 version", "> 1%"]}'
         }, {
             test: /\.json$/,
             loader: 'json-loader'
@@ -42,6 +43,11 @@ module.exports = {
             loader: "url-loader?limit=8192&name=images/[name].[ext]" //[hash:8].
         }]
     },
+    
+    postcss: [
+        values
+    ],
+
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),

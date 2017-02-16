@@ -1,0 +1,28 @@
+.sass-another---className---Ocyy0 {
+  background-color: blue;
+}@charset "UTF-8";
+body {
+  font-size: 14px; }
+
+.sass-main---className---DNVXP {
+  background: #ff0000;
+  color: yellow; }
+
+.sass-main---title1---3zJC9 {
+  background: #aaf200; }
+
+.sass-main---subClass---3QLqy {
+  /* 继承 */
+  background: #0c77f8; }
+
+.title1 {
+  color: #aaf200; }
+
+.sass-main---title2---3waMj {
+  color: #ff0000; }
+
+.sass-main---title3---3bQTt {
+  color: #ff0000; }
+.sass-main---test---3psLV {
+  color: #ff0000;
+  background-color: #0c77f8; }
