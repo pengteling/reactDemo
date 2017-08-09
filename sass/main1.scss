@@ -1,0 +1,38 @@
+body{
+	font-size:14px;
+  font-weight: bolder;
+}
+:global(.cssmodule) {
+  color: green;
+}
+:local(.className) {
+  background: red;
+  color: yellow;
+}
+:local(.title1){
+	background: green;
+}
+:local(.subClass) {
+  composes: title1; /* 继承 */
+  background: blue;
+}
+
+:global(.title-g) {
+  color: green;
+}
+
+.title2{
+	color:red
+}
+.title3 {
+  composes: className from './another.css';
+  color: red;
+}
+
+/* npm install --save postcss-loader postcss-modules-values */
+@value colors: "./colors.css"; /* 引入变量 */
+@value blue, red, green from colors;
+.test {
+  color: red;
+  background-color: blue;
+}

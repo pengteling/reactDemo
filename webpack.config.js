@@ -5,7 +5,7 @@ cnpm i webpack webpack-dev-server jsx-loader react-hot-loader style-loader css-l
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin"); //css文件独立出来
 var HtmlWebpackPlugin = require('html-webpack-plugin'); //
-var values = require('postcss-modules-values');
+var values = require('postcss-modules-values'); //让CSS Modules 支持使用变量
 
 module.exports = {
     // entry: './js/entry.js',

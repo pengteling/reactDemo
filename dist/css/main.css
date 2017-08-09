@@ -2,7 +2,11 @@
   background-color: blue;
 }@charset "UTF-8";
 body {
-  font-size: 14px; }
+  font-size: 14px;
+  font-weight: bolder; }
+
+.cssmodule {
+  color: #aaf200; }
 
 .sass-main---className---DNVXP {
   background: #ff0000;
@@ -23,6 +27,9 @@ body {
 
 .sass-main---title3---3bQTt {
   color: #ff0000; }
+
+/* npm install --save postcss-loader postcss-modules-values */
+/* 引入变量 */
 .sass-main---test---3psLV {
   color: #ff0000;
   background-color: #0c77f8; }
